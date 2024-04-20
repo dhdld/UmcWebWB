@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import Overlay from './overlay'
 import styled from 'styled-components';
+import {useNavigate} from 'react-router-dom'
 
 const PosterDiv = styled.div`
 flex-direction: column;
@@ -21,6 +22,7 @@ justify-content: space-between;
 `
 
 export default function Poster({id, coverImg, title, rating, overview}) {
+    const navigate = useNavigate()
     const [isHover, setIsHover] = useState(false)
     const onMouseEnter = () => {
         setIsHover(true)
@@ -30,7 +32,7 @@ export default function Poster({id, coverImg, title, rating, overview}) {
         setIsHover(false)
     }
     return (
-        <PosterDiv>
+        <PosterDiv onClick={()=>navigate(`/movie/${title}`)}>
             <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <img src={`https://image.tmdb.org/t/p/original/${coverImg}`} alt={title} style={{width: '100%',
         borderTopLeftRadius:'5px', borderTopRightRadius:'5px'}}/>

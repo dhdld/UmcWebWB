@@ -1,5 +1,5 @@
 import React from "react";
-import { BeatLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 const Loading = () => {
   return (
@@ -9,7 +9,8 @@ const Loading = () => {
         top: "50%",
         left: "50%",
     }}>
-    <BeatLoader
+
+<ClipLoader loading={true} speedMultiplier="1.5"
         color="#6986ec"
         margin={2}
 />
