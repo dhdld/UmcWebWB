@@ -25,18 +25,51 @@ cursor: pointer;
     font-weight: bold;
 }
 `
-const Login = styled(Li)`
-color: #FCC624;
-font-weight: bold;
+const Join = styled(Li)`
+    color: #FCC624;
+    font-weight: bold;
 `
 
 export default function Navbar() {
-    const [isLogin, setLogin] = useState(true);
+    const [isJoin, setJoin] = useState(false)
     const navigate = useNavigate();
 
-    const handleLogin = () => {
-        setLogin(!isLogin);
-        navigate('/')
+    const handleJoin = () => {
+        setJoin(!isJoin)
+        navigate('/signup')
+    }
+
+    const [isPopular, setPopular] = useState(false)
+    const handlePopular = () => {
+        setPopular(true)
+        setNowPlaying(false)
+        setTopRated(false)
+        setUpcoming(false)
+        navigate('/popular')
+    }
+    const [isNowPlaying, setNowPlaying] = useState(false)
+    const handleNowPlaying = () => {
+        setNowPlaying(true)
+        setPopular(false)
+        setTopRated(false)
+        setUpcoming(false)
+        navigate('/nowplaying')
+    }
+    const [isTopRated, setTopRated] = useState(false)
+    const handleTopRated = () => {
+        setTopRated(true)
+        setPopular(false)
+        setNowPlaying(false)
+        setUpcoming(false)
+        navigate('/toprated')
+    }
+    const [isUpcoming, setUpcoming] = useState(false)
+    const handleUpcoming = () => {
+        setUpcoming(true)
+        setPopular(false)
+        setNowPlaying(false)
+        setTopRated(false)
+        navigate('/upcoming')
     }
 
     return (
@@ -44,13 +77,18 @@ export default function Navbar() {
                 <Nav>
                 <p onClick={() => navigate('/')}>UMC Movie</p>
                 <Ul>
-                    <Login onClick={() => handleLogin()}>{
-                        isLogin ? '로그인' : '로그아웃'
-                    }</Login>
-                    <Li onClick={() => navigate('/popular')}>Popular</Li>
-                    <Li onClick={() => navigate('/nowplaying')}>Now Playing</Li>
-                    <Li onClick={() => navigate('/toprated')}>Top Rated</Li>
-                    <Li onClick={() => navigate('/upcoming')}>Upcoming</Li>
+                    {isJoin ? <Join onClick={() => handleJoin()}>회원가입</Join> 
+                    : <Join onClick={() => handleJoin()} style={{color:'white'}}>
+                    회원가입
+                    </Join>}
+                    {isPopular ? <Li onClick={() => handlePopular()} style={{color:'#FCC624'}}>Popular</Li>
+                    : <Li onClick={() => handlePopular()}>Popular</Li>}
+                    {isNowPlaying ? <Li onClick={() => handleNowPlaying()} style={{color:'#FCC624'}}>Now Playing</Li>
+                    : <Li onClick={() => handleNowPlaying()}>Now Playing</Li>}
+                    {isTopRated ? <Li onClick={() => handleTopRated()} style={{color:'#FCC624'}}>Top Rated</Li>
+                    : <Li onClick={() => handleTopRated()}>Top Rated</Li>}
+                    {isUpcoming ? <Li onClick={() => handleUpcoming()} style={{color:'#FCC624'}}>Upcoming</Li>
+                    : <Li onClick={() => handleUpcoming()}>Upcoming</Li>}
                 </Ul>
                 </Nav>
         </div>
