@@ -34,9 +34,22 @@ export default function Navbar() {
     const [isJoin, setJoin] = useState(false)
     const navigate = useNavigate();
 
+    const goHome = () => {
+        navigate('/')
+        setJoin(false)
+        setPopular(false)
+        setNowPlaying(false)
+        setTopRated(false)
+        setUpcoming(false)
+    }
+
     const handleJoin = () => {
         setJoin(!isJoin)
         navigate('/signup')
+        setPopular(false)
+        setNowPlaying(false)
+        setTopRated(false)
+        setUpcoming(false)
     }
 
     const [isPopular, setPopular] = useState(false)
@@ -75,7 +88,7 @@ export default function Navbar() {
     return (
         <div>
                 <Nav>
-                <p onClick={() => navigate('/')}>UMC Movie</p>
+                <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
                     {isJoin ? <Join onClick={() => handleJoin()}>회원가입</Join> 
                     : <Join onClick={() => handleJoin()} style={{color:'white'}}>
