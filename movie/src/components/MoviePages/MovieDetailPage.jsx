@@ -51,7 +51,7 @@ const MovieDetailPage = () => {
 
     const getMovie = async () => {
         const json = await (
-                    await fetch(`https://api.themoviedb.org/3/search/movie?api_key=dd9be884b513796774a807b78d0ee8c5&query=${movieName}&language=ko-KR`)).json();
+                    await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${import.meta.env.VITE_TMDB_API_KEY}&query=${movieName}&language=ko-KR`)).json();
         setMovie(json.results[0])
     }
     useEffect(()=>{

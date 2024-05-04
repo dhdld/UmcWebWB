@@ -26,11 +26,12 @@ cursor: pointer;
 }
 `
 const Join = styled(Li)`
-    color: #FCC624;
     font-weight: bold;
 `
 
 export default function Navbar() {
+    if(window.location.pathname === '*') return null;
+
     const [isJoin, setJoin] = useState(false)
     const navigate = useNavigate();
 
@@ -59,6 +60,7 @@ export default function Navbar() {
         setTopRated(false)
         setUpcoming(false)
         navigate('/popular')
+        setJoin(false)
     }
     const [isNowPlaying, setNowPlaying] = useState(false)
     const handleNowPlaying = () => {
@@ -67,6 +69,7 @@ export default function Navbar() {
         setTopRated(false)
         setUpcoming(false)
         navigate('/nowplaying')
+        setJoin(false)
     }
     const [isTopRated, setTopRated] = useState(false)
     const handleTopRated = () => {
@@ -75,6 +78,7 @@ export default function Navbar() {
         setNowPlaying(false)
         setUpcoming(false)
         navigate('/toprated')
+        setJoin(false)
     }
     const [isUpcoming, setUpcoming] = useState(false)
     const handleUpcoming = () => {
@@ -83,6 +87,7 @@ export default function Navbar() {
         setNowPlaying(false)
         setTopRated(false)
         navigate('/upcoming')
+        setJoin(false)
     }
 
     return (
@@ -90,8 +95,8 @@ export default function Navbar() {
                 <Nav>
                 <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
-                    {isJoin ? <Join onClick={() => handleJoin()}>회원가입</Join> 
-                    : <Join onClick={() => handleJoin()} style={{color:'white'}}>
+                    {isJoin ? <Join onClick={() => handleJoin()} style={{color:'#FCC624'}}>회원가입</Join> 
+                    : <Join onClick={() => handleJoin()}>
                     회원가입
                     </Join>}
                     {isPopular ? <Li onClick={() => handlePopular()} style={{color:'#FCC624'}}>Popular</Li>

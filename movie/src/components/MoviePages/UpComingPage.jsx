@@ -20,9 +20,8 @@ export default function UpcomingPage() {
 
     const getMovies = async () => {
         const json = await (
-                    await fetch(`https://api.themoviedb.org/3/movie/upcoming?&api_key=dd9be884b513796774a807b78d0ee8c5&language=ko-KR`)).json();
+                    await fetch(`https://api.themoviedb.org/3/movie/upcoming?&api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=ko-KR`)).json();
             setMovies(json.results);
-            console.log(json)
         console.log(json.results)
 
         setLoading(false)
