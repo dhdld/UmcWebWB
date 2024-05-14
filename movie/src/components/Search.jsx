@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchPoster from './SearchPoster';
+import useDebounce from './hooks/useDebounce';
 
 const SearchDiv = styled.div`
 justify-content: center;
@@ -69,21 +70,37 @@ padding: 10px;
 margin: 10px;
 `
 
+const Loading = styled.div`
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100%;
+font-size: 1rem;
+`
+
 
 const Search = () => {
-    const [search, setSearch] = useState('')
-    const [movies, setMovies] = useState([])
+    const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
+    const [movies, setMovies] = useState([]);
 
     const getMovies = async (text) => {
         const json = await(await fetch(`https://api.themoviedb.org/3/search/movie?query=${text}&api_key=${import.meta.env.VITE_TMDB_API_KEY}&include_adult=false&language=ko-KR&page=1`)).json();
-        console.log(json.results)
         setMovies(json.results)
+        setLoading(false)
     }
 
     const Searching = (e) => {
         setSearch(e.target.value)
-        getMovies(e.target.value)
+        setLoading(true)
+        if(e.target.value == '') setMovies([]);
     }
+
+    const debounceSearch = useDebounce(search, 500);
+
+    useEffect(() => {
+        getMovies(search)
+    }, [debounceSearch])
 
     return (
         <SearchDiv>
@@ -98,6 +115,7 @@ const Search = () => {
             </SearchBar>
             { search ? 
             <SearchBox>
+                {loading ? <Loading>로딩 중입니다...</Loading> :
             <Posters>
                 {movies.map((movie) => (
                     <SearchPoster key={movie.id} id={movie.id} coverImg={movie.poster_path} title={movie.original_title} 
@@ -105,6 +123,7 @@ const Search = () => {
                     ))
                 }
             </Posters>
+            }
             </SearchBox>
             : <></> }
         </SearchDiv>

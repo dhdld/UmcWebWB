@@ -24,7 +24,7 @@ function App() {
       <Route path='/nowplaying' element={<NowPlayingPage />}/>
       <Route path='/toprated' element={<TopRatedPage />}/>
       <Route path='/upcoming' element={<UpcomingPage />}/>
-      <Route path='/movie/:name' element={<MovieDetailPage />}/>
+      <Route path='/movie/:id' element={<MovieDetailPage />}/>
       <Route path='/signup' element={<SignUp />}/>
       <Route path='/signin' element={<SignIn />}/>
       <Route path='*' element={<NotFoundPage />}/>

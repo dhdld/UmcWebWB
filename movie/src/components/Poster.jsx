@@ -32,9 +32,10 @@ export default function Poster({id, coverImg, title, rating, overview}) {
         setIsHover(false)
     }
     return (
-        <PosterDiv onClick={()=>navigate(`/movie/${title}`)}>
+        <PosterDiv onClick={()=>navigate(`/movie/${id}`)}>
             <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <img src={`https://image.tmdb.org/t/p/original/${coverImg}`} alt={title} style={{width: '100%',
+            height: '305px',
         borderTopLeftRadius:'5px', borderTopRightRadius:'5px'}}/>
             {isHover && <Overlay title={title} overview={overview}/>}
             <Title>

@@ -66,7 +66,7 @@ export default function SearchPoster({id, coverImg, title, rating, overview}) {
     )
 
     return (
-        <PosterDiv onClick={()=>navigate(`/movie/${title}`)}>
+        <PosterDiv onClick={()=>navigate(`/movie/${id}`)}>
             <div onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <img src={`https://image.tmdb.org/t/p/original/${coverImg}`} alt={title} style={{height:'230px',width:'100%',
         borderTopLeftRadius:'5px', borderTopRightRadius:'5px'}}/>

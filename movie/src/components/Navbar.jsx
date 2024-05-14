@@ -11,6 +11,10 @@ padding: 0 3px;
 font-size: 0.9rem;
 padding-left: 10px;
 background-color: #171A32;
+position: sticky;
+top: 0;
+z-index: 100;
+height: 50px;
 `
 const Ul = styled.ul`
 display: flex;
@@ -25,13 +29,14 @@ cursor: pointer;
     font-weight: bold;
 }
 `
+const CheckedLi = styled(Li)`
+color: #FCC624;
+`
 const Join = styled(Li)`
     font-weight: bold;
 `
 
 export default function Navbar() {
-    if(window.location.pathname === '*') return null;
-
     const [isJoin, setJoin] = useState(false)
     const navigate = useNavigate();
 
@@ -91,7 +96,6 @@ export default function Navbar() {
     }
 
     return (
-        <div>
                 <Nav>
                 <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
@@ -99,16 +103,15 @@ export default function Navbar() {
                     : <Join onClick={() => handleJoin()}>
                     회원가입
                     </Join>}
-                    {isPopular ? <Li onClick={() => handlePopular()} style={{color:'#FCC624'}}>Popular</Li>
+                    {isPopular ? <CheckedLi onClick={() => handlePopular()}>Popular</CheckedLi>
                     : <Li onClick={() => handlePopular()}>Popular</Li>}
-                    {isNowPlaying ? <Li onClick={() => handleNowPlaying()} style={{color:'#FCC624'}}>Now Playing</Li>
+                    {isNowPlaying ? <CheckedLi onClick={() => handleNowPlaying()}>Now Playing</CheckedLi>
                     : <Li onClick={() => handleNowPlaying()}>Now Playing</Li>}
-                    {isTopRated ? <Li onClick={() => handleTopRated()} style={{color:'#FCC624'}}>Top Rated</Li>
+                    {isTopRated ? <CheckedLi onClick={() => handleTopRated()} >Top Rated</CheckedLi>
                     : <Li onClick={() => handleTopRated()}>Top Rated</Li>}
-                    {isUpcoming ? <Li onClick={() => handleUpcoming()} style={{color:'#FCC624'}}>Upcoming</Li>
+                    {isUpcoming ? <CheckedLi onClick={() => handleUpcoming()}>Upcoming</CheckedLi>
                     : <Li onClick={() => handleUpcoming()}>Upcoming</Li>}
                 </Ul>
                 </Nav>
-        </div>
     )
 }

@@ -168,11 +168,21 @@ const Signup = () => {
         navigate('/signin')
         }
         else {
-            setNameMessage('이름을 입력해주세요!')
-            setEmailMessage('이메일을 입력해주세요.')
-            setAgeMessage('나이는 숫자로 입력해주세요.')
-            setPasswordMessage('비밀번호를 입력해주세요.')
-            setPasswordCheckMessage('비밀번호를 다시 입력해주세요.')  
+            if(name === '') {
+                setNameMessage('이름을 입력해주세요!')
+            }
+            if(email === '') {
+                setEmailMessage('이메일을 입력해주세요.')
+            }
+            if(age === '') {
+                setAgeMessage('나이는 숫자로 입력해주세요.')
+            }
+            if(password === '') {
+                setPasswordMessage('비밀번호를 입력해주세요.')
+            }
+            if(passwordCheck === '') {
+                setPasswordCheckMessage('비밀번호를 다시 입력해주세요.')
+            }
         }
     }
 
