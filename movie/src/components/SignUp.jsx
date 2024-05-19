@@ -58,18 +58,21 @@ const Signup = () => {
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
+    const [id, setId] = useState('');
     const [email, setEmail] = useState('');
     const [age, setAge] = useState('');
     const [password, setPassword] = useState('');
     const [passwordCheck, setPasswordCheck] = useState('');
 
     const [nameMessage, setNameMessage] = useState('');
+    const [idMessage, setIdMessage] = useState('');
     const [emailMessage, setEmailMessage] = useState('');
     const [ageMessage, setAgeMessage] = useState('');
     const [passwordMessage, setPasswordMessage] = useState('');
     const [passwordCheckMessage, setPasswordCheckMessage] = useState('');
 
     const [isName, setIsName] = useState(false);
+    const [isId, setIsId] = useState(false);
     const [isEmail, setIsEmail] = useState(false);
     const [isAge, setIsAge] = useState(false);
     const [isPassword, setIsPassword] = useState(false);
@@ -83,6 +86,17 @@ const Signup = () => {
         } else {
             setNameMessage('이름을 입력해주세요!')
             setIsName(false)
+        }
+    }
+
+    const onChangeId = (e) => {
+        setId(e.target.value)
+        if(e.target.value.length > 0) {
+            setIdMessage('')
+            setIsId(true)
+        } else {
+            setIdMessage('아이디를 입력해주세요.')
+            setIsId(false)
         }
     }
 
@@ -162,14 +176,17 @@ const Signup = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if(isName && isEmail && isAge && isPassword && isPasswordCheck) {
+        if(isName && isId && isEmail && isAge && isPassword && isPasswordCheck) {
         console.log('name:', name, 'email:', email, 'age:', age, 'password:', password, 'passwordCheck:', passwordCheck)
         alert('회원가입이 완료되었습니다.')
-        navigate('/signin')
+        navigate('/login')
         }
         else {
             if(name === '') {
                 setNameMessage('이름을 입력해주세요!')
+            }
+            if(id === '') {
+                setIdMessage('아이디를 입력해주세요.')
             }
             if(email === '') {
                 setEmailMessage('이메일을 입력해주세요.')
@@ -193,6 +210,8 @@ const Signup = () => {
             <Form onSubmit={onSubmit}>
             <Input type="text" placeholder="이름을 입력해주세요" value={name} onChange={onChangeName}/>
             <ErrMsg>{nameMessage}</ErrMsg>
+            <Input type="text" placeholder="아이디를 입력해주세요" value={id} onChange={onChangeId}/>
+            <ErrMsg>{idMessage}</ErrMsg>
             <Input type="text" placeholder="이메일을 입력해주세요" value={email} onChange={onChangeEmail}/>
             <ErrMsg>{emailMessage}</ErrMsg>
             <Input type="text" placeholder="나이를 입력해주세요" value={age} onChange={onChangeAge}/>
@@ -202,13 +221,13 @@ const Signup = () => {
             <Input type="password" placeholder="비밀번호 확인" value={passwordCheck} onChange={onChangePasswordCheck}/>
             <ErrMsg>{passwordCheckMessage}</ErrMsg>
             
-            { isName && isEmail && isAge && isPassword && isPasswordCheck ? 
+            { isName && isId && isEmail && isAge && isPassword && isPasswordCheck ? 
             <Submit style={{backgroundColor:'#FCC624'}}>제출하기</Submit> 
              : <Submit >제출하기</Submit> }
 </Form>
             <MoveDiv>
                 <p>이미 아이디가 있으신가요?</p>
-                <p style={{fontWeight:"bold"}} onClick={()=>navigate('/signin')}>로그인 페이지로 이동하기</p>
+                <p style={{fontWeight:"bold"}} onClick={()=>navigate('/login')}>로그인 페이지로 이동하기</p>
             </MoveDiv>
         </Container>
     );

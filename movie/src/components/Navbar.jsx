@@ -31,18 +31,24 @@ cursor: pointer;
 `
 const CheckedLi = styled(Li)`
 color: #FCC624;
+font-weight: bold;
 `
 const Join = styled(Li)`
     font-weight: bold;
 `
 
 export default function Navbar() {
-    const [isJoin, setJoin] = useState(false)
     const navigate = useNavigate();
+
+    const [isLogin, setLogin] = useState(false)
+
+    const [isJoin, setJoin] = useState(false)
+    const [isSignIn, setSignIn] = useState(false)
 
     const goHome = () => {
         navigate('/')
         setJoin(false)
+        setSignIn(false)
         setPopular(false)
         setNowPlaying(false)
         setTopRated(false)
@@ -50,8 +56,18 @@ export default function Navbar() {
     }
 
     const handleJoin = () => {
-        setJoin(!isJoin)
+        setJoin(true)
+        setSignIn(false)
         navigate('/signup')
+        setPopular(false)
+        setNowPlaying(false)
+        setTopRated(false)
+        setUpcoming(false)
+    }
+    const handleLogin = () => {
+        setSignIn(true)
+        setJoin(false)
+        navigate('/login')
         setPopular(false)
         setNowPlaying(false)
         setTopRated(false)
@@ -66,6 +82,7 @@ export default function Navbar() {
         setUpcoming(false)
         navigate('/popular')
         setJoin(false)
+        setSignIn(false)
     }
     const [isNowPlaying, setNowPlaying] = useState(false)
     const handleNowPlaying = () => {
@@ -75,6 +92,7 @@ export default function Navbar() {
         setUpcoming(false)
         navigate('/nowplaying')
         setJoin(false)
+        setSignIn(false)
     }
     const [isTopRated, setTopRated] = useState(false)
     const handleTopRated = () => {
@@ -84,6 +102,7 @@ export default function Navbar() {
         setUpcoming(false)
         navigate('/toprated')
         setJoin(false)
+        setSignIn(false)
     }
     const [isUpcoming, setUpcoming] = useState(false)
     const handleUpcoming = () => {
@@ -93,16 +112,26 @@ export default function Navbar() {
         setTopRated(false)
         navigate('/upcoming')
         setJoin(false)
+        setSignIn(false)
     }
 
     return (
                 <Nav>
                 <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
-                    {isJoin ? <Join onClick={() => handleJoin()} style={{color:'#FCC624'}}>회원가입</Join> 
-                    : <Join onClick={() => handleJoin()}>
-                    회원가입
-                    </Join>}
+                    {
+                    isLogin ? <CheckedLi>로그아웃</CheckedLi> :
+                    ( isSignIn ? <CheckedLi onClick={() => handleLogin()}>로그인</CheckedLi>
+                    : <Join onClick={() => handleLogin()}>로그인</Join>
+                    )}
+                    {
+                    isLogin ? null :
+                    ( isJoin ? 
+                        <CheckedLi onClick={() => handleJoin()}>회원가입</CheckedLi> 
+                        : <Join onClick={() => handleJoin()}>회원가입</Join>
+                    )
+                    }
+                    
                     {isPopular ? <CheckedLi onClick={() => handlePopular()}>Popular</CheckedLi>
                     : <Li onClick={() => handlePopular()}>Popular</Li>}
                     {isNowPlaying ? <CheckedLi onClick={() => handleNowPlaying()}>Now Playing</CheckedLi>

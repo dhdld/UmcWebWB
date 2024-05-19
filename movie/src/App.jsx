@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import NotFoundPage from './components/NotFoundPage';
 import SignUp from './components/SignUp';
-import SignIn from './components/SignIn';
+import Login from './components/Login';
 
 import PopularPage from './components/MoviePages/PopularPage';
 import NowPlayingPage from './components/MoviePages/NowPlayingPage';
@@ -26,7 +26,7 @@ function App() {
       <Route path='/upcoming' element={<UpcomingPage />}/>
       <Route path='/movie/:id' element={<MovieDetailPage />}/>
       <Route path='/signup' element={<SignUp />}/>
-      <Route path='/signin' element={<SignIn />}/>
+      <Route path='/login' element={<Login />}/>
       <Route path='*' element={<NotFoundPage />}/>
       </Routes>
       <Footer />

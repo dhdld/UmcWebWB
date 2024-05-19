@@ -22,13 +22,13 @@ align-content: center;
 
     const MainPage = () => {
 
+    const [isLogin, setLogin] = useState(false)
+    const [name, setName] = useState('');
 
     return (
         <Container>
         <Welcome>
-            <p >
-            환영합니다 
-            </p>
+            {isLogin ? <p>{name}님 환영합니다!</p> : <p>환영합니다</p>}
         </Welcome>
 
         <Search />
