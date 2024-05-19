@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { useState } from 'react';
+import API from '../API';
 
 const Container = styled.div`
     display: flex;
@@ -91,9 +92,9 @@ const Login = () => {
     }
 
     const onSubmit = (e) => {
-        e.preventDefault();
         if(isId && isPassword) {
-        navigate('/')
+            e.preventDefault();
+            login();
         }
         else {
             if(id === '') {
@@ -102,6 +103,22 @@ const Login = () => {
             if(password === '') {
                 setPasswordMessage('비밀번호를 입력해주세요.')
             }
+        }
+    }
+
+    async function login() {
+        try {
+            const response = await API.post('/auth/login', 
+            {
+                "username": id,
+                "password": password
+              })
+            response.data.token && localStorage.setItem('token', response.data.token)
+            alert('로그인 성공')
+            navigate('/')
+        }
+        catch(e) {
+            console.log(e)
         }
     }
 
@@ -115,7 +132,7 @@ const Login = () => {
             <ErrMsg>{passwordMessage}</ErrMsg>
             { isId &&  isPassword  ? 
             <Submit style={{backgroundColor:'#FCC624'}}>로그인</Submit> 
-             : <Submit >제출하기</Submit> }
+             : <Submit >로그인</Submit> }
                 </Form>
             </Container>
     );

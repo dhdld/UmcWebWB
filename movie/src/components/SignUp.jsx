@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 import { useState } from 'react';
+import axios from 'axios';
+import API from '../API';
 
 const Container = styled.div`
     display: flex;
@@ -174,12 +176,30 @@ const Signup = () => {
         }
     }
 
+    async function postData() {
+        try {
+            const response = await API.post('/auth/signup', 
+            {
+                "name": name,
+                "email": email,
+                "age": age,
+                "username": id,
+                "password": password,
+                "passwordCheck": passwordCheck
+              })
+            console.log(response)
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
+
     const onSubmit = (e) => {
         e.preventDefault();
-        if(isName && isId && isEmail && isAge && isPassword && isPasswordCheck) {
-        console.log('name:', name, 'email:', email, 'age:', age, 'password:', password, 'passwordCheck:', passwordCheck)
+        if(isName ) {
+        postData()
         alert('회원가입이 완료되었습니다.')
-        navigate('/login')
+        //navigate('/login')
         }
         else {
             if(name === '') {

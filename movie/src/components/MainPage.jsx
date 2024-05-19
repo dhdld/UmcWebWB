@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import API from '../API';
 import Search from './Search';
 
 const Container = styled.div`
@@ -24,6 +24,31 @@ align-content: center;
 
     const [isLogin, setLogin] = useState(false)
     const [name, setName] = useState('');
+
+
+    const token = localStorage.getItem('token')
+
+    useEffect(() => {
+        console.log(token)
+        getLogin(token)
+    }, [])
+
+    async function getLogin (token) {
+        if (token) {
+            await API.get('/auth/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => {
+                console.log(res.data)
+                setName(res.data.name)
+                setLogin(true)
+            })
+        }
+        else {
+            setLogin(false)
+        }
+    }
 
     return (
         <Container>

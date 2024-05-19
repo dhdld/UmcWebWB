@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -44,6 +44,26 @@ export default function Navbar() {
 
     const [isJoin, setJoin] = useState(false)
     const [isSignIn, setSignIn] = useState(false)
+
+    const token = localStorage.getItem('token')
+    console.log(token)
+
+    useEffect(() => {
+        if (token) {
+            setLogin(true)
+        }
+        else {
+            setLogin(false)
+        }
+    }, [token])
+
+    const logout = () =>{
+        localStorage.removeItem('token')
+        setLogin(false)
+        setJoin(false)
+        setSignIn(false)
+        navigate('/')
+    }
 
     const goHome = () => {
         navigate('/')
@@ -120,7 +140,7 @@ export default function Navbar() {
                 <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
                     {
-                    isLogin ? <CheckedLi>로그아웃</CheckedLi> :
+                    isLogin ? <CheckedLi onClick={()=>logout()}>로그아웃</CheckedLi> :
                     ( isSignIn ? <CheckedLi onClick={() => handleLogin()}>로그인</CheckedLi>
                     : <Join onClick={() => handleLogin()}>로그인</Join>
                     )}
