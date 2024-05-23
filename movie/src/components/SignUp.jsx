@@ -188,6 +188,8 @@ const Signup = () => {
                 "passwordCheck": passwordCheck
               })
             console.log(response)
+            alert('회원가입이 완료되었습니다.')
+            navigate('/login')
         }
         catch(e) {
             console.log(e)
@@ -198,8 +200,7 @@ const Signup = () => {
         e.preventDefault();
         if(isName ) {
         postData()
-        alert('회원가입이 완료되었습니다.')
-        //navigate('/login')
+
         }
         else {
             if(name === '') {

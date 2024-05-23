@@ -62,6 +62,7 @@ export default function Navbar() {
         setLogin(false)
         setJoin(false)
         setSignIn(false)
+        window.location.reload()
         navigate('/')
     }
 

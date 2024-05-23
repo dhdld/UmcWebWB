@@ -33,6 +33,12 @@ align-content: center;
         getLogin(token)
     }, [])
 
+    useEffect(() => {
+        console.log(token)
+        getLogin(token)
+    }, [token])
+
+
     async function getLogin (token) {
         if (token) {
             await API.get('/auth/me', {
@@ -46,6 +52,7 @@ align-content: center;
             })
         }
         else {
+            setName('')
             setLogin(false)
         }
     }
