@@ -15,6 +15,9 @@ const BackgroundImg = styled.div`
     position: absolute;
     z-index: -1;
     opacity: 0.2;
+    @media (max-width: 768px) {
+        background-image: none;
+    }
 `
 const Div = styled.div`
     display: flex;
@@ -23,12 +26,21 @@ const Div = styled.div`
     margin-left: 200px;
     margin-right: 200px;
     height: calc(100vh - 50px);
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        margin: 30px 0;
+        height: auto;
+    }
 `
 
 const Info = styled.div`
     flex-direction: column;
     padding-left: 80px;
     justify-content: center;
+    @media (max-width: 768px) {
+        padding: 0 5%;
+    }
 `
 const MovieTitle = styled.p`
     font-size: 1.4rem;
@@ -49,6 +61,11 @@ const CastDiv = styled.div`
     justify-content: center;
     align-items: center;
     margin-top:20px;
+    @media (max-width: 768px) {
+        margin-left: 50px;
+        margin-right: 50px;
+        height: auto;
+    }
     `
 const CastTitle = styled.p`
 font-size: 1.1rem;
@@ -62,6 +79,9 @@ margin-bottom: 30px;
     grid-auto-rows:120px;
     gap: 5px;
     font-size: 0.8rem;
+    @media (max-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
     `
 
 const Cast = styled.div`

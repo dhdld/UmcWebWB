@@ -27,6 +27,9 @@ margin: 10px;
 &:focus {
     outline: none;
 }
+@media (max-width: 768px) {
+    width: 290px;
+}
     `
 
 const ErrMsg = styled.div`
@@ -46,6 +49,9 @@ const Submit = styled.button`
     font-size: 18px;
     margin-top: 20px;
     color: black;
+    @media (max-width: 768px) {
+        width: 330px;
+    }
 `
 
 const MoveDiv = styled.div`

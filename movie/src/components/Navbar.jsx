@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = styled.div`
 display: flex;
@@ -15,7 +17,18 @@ position: sticky;
 top: 0;
 z-index: 100;
 height: 50px;
+@media (max-width: 700px) {
+    Ul {
+        display: none;
+    }
+}
+@media (min-width: 701px) {
+    Div {
+        display: none;
+    }
+}
 `
+
 const Ul = styled.ul`
 display: flex;
 align-items: center;
@@ -35,6 +48,38 @@ font-weight: bold;
 `
 const Join = styled(Li)`
     font-weight: bold;
+`
+
+const Div = styled.div`
+display: flex;
+font-size: 1.1rem;
+margin-right: 10px;
+`
+const SideBarUl = styled.ul`
+padding-left: 20px;
+list-style: none;
+display: flex;
+flex-direction: column;
+position: fixed;
+top: 35px;
+width: 100%;
+height: 100%;
+background-color: #22264C;
+z-index: 1;
+font-size: 1rem;
+`
+const SideBarLi = styled.li`
+width: 100px;
+margin: 10px 0;
+cursor: pointer;
+&:hover {
+    transform: scale(1.05);
+    font-weight: bold;
+}
+`
+const SideBarCheckedLi = styled(SideBarLi)`
+color: #FCC624;
+font-weight: bold;
 `
 
 export default function Navbar() {
@@ -64,6 +109,7 @@ export default function Navbar() {
         setSignIn(false)
         window.location.reload()
         navigate('/')
+        setOpen(false)
     }
 
     const goHome = () => {
@@ -74,6 +120,7 @@ export default function Navbar() {
         setNowPlaying(false)
         setTopRated(false)
         setUpcoming(false)
+        setOpen(false)
     }
 
     const handleJoin = () => {
@@ -84,6 +131,7 @@ export default function Navbar() {
         setNowPlaying(false)
         setTopRated(false)
         setUpcoming(false)
+        setOpen(false)
     }
     const handleLogin = () => {
         setSignIn(true)
@@ -93,6 +141,7 @@ export default function Navbar() {
         setNowPlaying(false)
         setTopRated(false)
         setUpcoming(false)
+        setOpen(false)
     }
 
     const [isPopular, setPopular] = useState(false)
@@ -104,6 +153,7 @@ export default function Navbar() {
         navigate('/popular')
         setJoin(false)
         setSignIn(false)
+        setOpen(false)
     }
     const [isNowPlaying, setNowPlaying] = useState(false)
     const handleNowPlaying = () => {
@@ -114,6 +164,7 @@ export default function Navbar() {
         navigate('/nowplaying')
         setJoin(false)
         setSignIn(false)
+        setOpen(false)
     }
     const [isTopRated, setTopRated] = useState(false)
     const handleTopRated = () => {
@@ -124,6 +175,7 @@ export default function Navbar() {
         navigate('/toprated')
         setJoin(false)
         setSignIn(false)
+        setOpen(false)
     }
     const [isUpcoming, setUpcoming] = useState(false)
     const handleUpcoming = () => {
@@ -134,9 +186,15 @@ export default function Navbar() {
         navigate('/upcoming')
         setJoin(false)
         setSignIn(false)
+        setOpen(false)
     }
 
+    const [isOpen, setOpen] = useState(false)
+    const IsSideBar = () => {
+        setOpen(!isOpen)
+    }
     return (
+            <>
                 <Nav>
                 <p onClick={() => goHome()}>UMC Movie</p>
                 <Ul>
@@ -162,6 +220,30 @@ export default function Navbar() {
                     {isUpcoming ? <CheckedLi onClick={() => handleUpcoming()}>Upcoming</CheckedLi>
                     : <Li onClick={() => handleUpcoming()}>Upcoming</Li>}
                 </Ul>
+                <Div onClick={()=>IsSideBar()}>
+                <FontAwesomeIcon icon={faBars} style={{color: "white",}} />
+                </Div>
                 </Nav>
+                {isOpen ?
+                <SideBarUl>
+                    {isLogin ? <SideBarLi onClick={()=>logout()}>로그아웃</SideBarLi> :
+                    ( isSignIn ? <SideBarLi onClick={() => handleLogin()}>로그인</SideBarLi>
+                    : <SideBarLi onClick={() => handleLogin()}>로그인</SideBarLi>
+                    )}
+                    {isLogin ? null :
+                    ( isJoin ? 
+                        <SideBarLi onClick={() => handleJoin()}>회원가입</SideBarLi> 
+                        : <SideBarLi onClick={() => handleJoin()}>회원가입</SideBarLi>
+                    )}
+                    {isPopular ? <SideBarCheckedLi onClick={() => handlePopular()}>Popular</SideBarCheckedLi>
+                    : <SideBarLi onClick={() => handlePopular()}>Popular</SideBarLi>}
+                    {isNowPlaying ? <SideBarCheckedLi onClick={() => handleNowPlaying()}>Now Playing</SideBarCheckedLi>
+                    : <SideBarLi onClick={() => handleNowPlaying()}>Now Playing</SideBarLi>}
+                    {isTopRated ? <SideBarCheckedLi onClick={() => handleTopRated()} >Top Rated</SideBarCheckedLi>
+                    : <SideBarLi onClick={() => handleTopRated()}>Top Rated</SideBarLi>}
+                    {isUpcoming ? <SideBarCheckedLi onClick={() => handleUpcoming()}>Upcoming</SideBarCheckedLi>
+                    : <SideBarLi onClick={() => handleUpcoming()}>Upcoming</SideBarLi>}
+                </SideBarUl> : null}
+            </>
     )
 }
