@@ -16,7 +16,7 @@ background-color: #171A32;
 position: sticky;
 top: 0;
 z-index: 100;
-height: 50px;
+height: 50px; 
 @media (max-width: 700px) {
     Ul {
         display: none;
@@ -62,11 +62,12 @@ display: flex;
 flex-direction: column;
 position: fixed;
 top: 35px;
-width: 100%;
 height: 100%;
 background-color: #22264C;
-z-index: 1;
+z-index: 10;
 font-size: 1rem;
+transition: right 0.7s ease;
+right: ${props => props.isOpen ? '-5%' : '-100%'};
 `
 const SideBarLi = styled.li`
 width: 100px;
@@ -224,8 +225,7 @@ export default function Navbar() {
                 <FontAwesomeIcon icon={faBars} style={{color: "white",}} />
                 </Div>
                 </Nav>
-                {isOpen ?
-                <SideBarUl>
+                <SideBarUl isOpen={isOpen}> 
                     {isLogin ? <SideBarLi onClick={()=>logout()}>로그아웃</SideBarLi> :
                     ( isSignIn ? <SideBarLi onClick={() => handleLogin()}>로그인</SideBarLi>
                     : <SideBarLi onClick={() => handleLogin()}>로그인</SideBarLi>
@@ -243,7 +243,7 @@ export default function Navbar() {
                     : <SideBarLi onClick={() => handleTopRated()}>Top Rated</SideBarLi>}
                     {isUpcoming ? <SideBarCheckedLi onClick={() => handleUpcoming()}>Upcoming</SideBarCheckedLi>
                     : <SideBarLi onClick={() => handleUpcoming()}>Upcoming</SideBarLi>}
-                </SideBarUl> : null}
+                </SideBarUl>
             </>
     )
 }
