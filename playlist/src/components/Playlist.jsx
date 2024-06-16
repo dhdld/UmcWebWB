@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { incrementAmount, decrementAmount, clearCart }  from '../redux/cartSlice'
 import { selectTotalCartQuantity, selectTotalPrice, isCartEmpty } from '../redux/cartSlice'
 import { CartIcon, ChevronDown, ChevronUp } from '../constants/icons'
 import { openModal, closeModal } from '../redux/modalSlice'
+import {fetchMusic} from '../redux/cartSlice'
 
 const Header = styled.div`
     display: flex;
@@ -118,13 +119,44 @@ const ClearBtn = styled.button`
     }
 `
 
+const Loading = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 30px;
+    margin-top: 20px;
+`
+
 function Playlist() {
-    const playlist = useSelector(state => state.playlist);
+    //const playlist = useSelector(state => state.playlist);
+    const {items, status, error} = useSelector(state => state.playlist);
     const totalCartQuantity = useSelector(selectTotalCartQuantity);
     const totalPrice = useSelector(selectTotalPrice);
     const cartEmpty = useSelector(isCartEmpty);
     const showModal = useSelector(state => state.modal.showModal);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchMusic());
+    }, [dispatch]);
+
+    if (status === 'loading') return <Loading>Loading...</Loading>;
+    if (status === 'failed') return <>
+    <Header>
+    <h2>UMC PlayList</h2>
+    <Cart>
+        <Carticon>
+            <CartIcon />
+        </Carticon>
+    <TotalCnt>{totalCartQuantity}</TotalCnt>
+    </Cart>
+    </Header>
+    <Body>        <h2>당신이 선택한 음반</h2>
+    <p>고객님이 좋아하는 음반을 담아보세요~!</p>
+    </Body>
+    </>
+    ;
 
     const handleClearCart = () => {
         dispatch(openModal());  // 모달 열기
@@ -156,7 +188,7 @@ function Playlist() {
         <>
         <h2>당신이 선택한 음반</h2>
         
-        {playlist.map(song => (
+        {items.map(song => (
             <Music key={song.id}>
                 <Img src={song.img} alt={song.title} />
                 <Info>
