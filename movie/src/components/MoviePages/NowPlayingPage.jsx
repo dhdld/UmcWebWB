@@ -1,9 +1,12 @@
-import Poster from '../Poster';
-import { useEffect, useState, useRef } from 'react';
+//import Poster from '../Poster';
+import { useEffect, useState, useRef, useCallback, Suspense, lazy } from 'react';
 import styled from 'styled-components';
 import Loading from '../loading';
 import { ClipLoader } from "react-spinners";
 import useIntersectionObserver from '../hooks/useIntersectionObserver';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+const Poster = lazy(()=>import('../Poster'))
 
 const Posters = styled.div`
 display: grid;
@@ -16,60 +19,78 @@ margin-right: 50px;
 background-color: #22264C;
 `
 
-export default function NowPlayingPage() {
-    const [loading, setLoading] = useState(true)
-    const [movies, setMovies] = useState([])
 
-    const [oneLoading, setOneLoading] = useState(false)
-    const target = useRef(null)
-    const [page, setPage] = useState(1)
+export default function NowPlayingPage() {
     const totalPage = 100 // 너무 많아서 100으로 제한
 
-    const [observe, unobserve] = useIntersectionObserver(()=>{
-        setPage((page) => page + 1)
-    })
+    const fetchMovies = async ({ pageParam = 1 }) => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/now_playing?&page=${pageParam}&api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=ko-KR`
+        );
+        const data = await response.json();
+        return data
+      };
 
-    useEffect(()=>{
-        if(page == 1) observe(target.current)
+      const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
+      } = useInfiniteQuery({
+        queryKey: ['movies'],
+        queryFn: fetchMovies,
+        getNextPageParam: (lastPage, pages) => {
+          if (lastPage.page < totalPage) return lastPage.page + 1;
+          return undefined;
+        },
+      });
 
-        if(totalPage < page) {
-            unobserve(target.current)
-        }
-    }, [page])
 
-
-    const getMovies = async () => {
-        setOneLoading(true)
-        const json = await (
-                    await fetch(`https://api.themoviedb.org/3/movie/now_playing?&page=${page}&api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=ko-KR`)).json();
-            setMovies((movies) => [...movies, ...json.results])
-        setLoading(false)
-        setOneLoading(false)
-    }
-
-    useEffect(()=>{
-        getMovies()
-        console.log(page)
-    }, [page])
-
-    useEffect(()=>{
-        if(loading) unobserve(target.current)
-        else observe(target.current)
-    }, [loading])
+    const observerElem = useRef()
+    const lastMovieElementRef = useCallback(
+        (node) => {
+            if (isFetchingNextPage) return;
+            if (observerElem.current) observerElem.current.disconnect();
+            observerElem.current = new IntersectionObserver((entries) => {
+              if (entries[0].isIntersecting && hasNextPage) {
+                fetchNextPage();
+                }
+            });
+            if (node) {
+              observerElem.current.observe(node);
+            }
+          },
+          [isFetchingNextPage, hasNextPage, fetchNextPage]
+        );
+      
 
     return (
         <>
+        <Suspense fallback={<Loading />}>
         <Posters>
-            {loading ? <Loading />:
-        movies.map((movie) => (
-            <Poster key={movie.id} id={movie.id} coverImg={movie.poster_path} title={movie.original_title} 
-            rating={movie.vote_average} overview={movie.overview} />
-            ))
-        }
-        {oneLoading && <MoreLoading />}
-        <div ref={target}></div>
+        {data?.pages &&
+        data.pages.map((page, pageIndex) =>
+          page.results.map((movie, movieIndex) => {
+            const isLast = pageIndex === data.pages.length - 1 && movieIndex === page.results.length - 1;
+            return (
+              <div ref={isLast ? lastMovieElementRef : null} key={movie.id}>
+                <Poster
+                  id={movie.id}
+                  coverImg={movie.poster_path}
+                  title={movie.original_title}
+                  rating={movie.vote_average}
+                  overview={movie.overview}
+                />
+              </div>
+            );
+          })
+        )}
+      {isFetchingNextPage && <MoreLoading />}
     </Posters>
-    
+    </Suspense>
     </>
 )
 }

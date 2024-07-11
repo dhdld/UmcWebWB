@@ -13,9 +13,13 @@ import TopRatedPage from './components/MoviePages/TopRatedPage';
 import UpcomingPage from './components/MoviePages/UpComingPage'
 import MovieDetailPage from './components/MoviePages/MovieDetailPage';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <>
+    <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <Navbar />
       <Routes>
@@ -31,6 +35,7 @@ function App() {
       </Routes>
       <Footer />
     </BrowserRouter>
+    </QueryClientProvider>
     </>
   )
 }

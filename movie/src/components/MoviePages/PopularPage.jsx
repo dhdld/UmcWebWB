@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Loading from '../loading';
 import Pagination from '../Pagination';
 
+import { useQuery } from '@tanstack/react-query';
+
 const Posters = styled.div`
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -18,39 +20,47 @@ background-color: #22264C;
 
 export default function PopularPage() {
     const [loading, setLoading] = useState(true)
-    const [movies, setMovies] = useState([])
 
     const [page, setPage] = useState(1)
     const totalPage = 100 // 너무 많아서 100으로 제한
     const location = useLocation()
 
+    const fetchMovies = async ({ pageParam = 1 }) => {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?&page=${pageParam}&api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=ko-KR`
+        );
+        const data = await response.json();
+        return data.results;
+      };
 
-    const getMovies = async () => {
-        const json = await (
-                    await fetch(`https://api.themoviedb.org/3/movie/popular?&page=${page}&api_key=${import.meta.env.VITE_TMDB_API_KEY}&language=ko-KR`)).json();
-            setMovies(json.results);
-    }
+      const { data, error, isLoading, isFetching } = useQuery({
+        queryKey: ['movies', page],
+        queryFn: () => fetchMovies({ pageParam: page }),
+        keepPreviousData: true,
+      });
 
     useEffect(()=>{
-        getMovies()
-        setLoading(false)
-    }, [page])
-
-    useEffect(()=>{
-        getMovies()
         if(location.state !== null && location.state.page)
             setPage(location.state.page)
-    }, [])
+    }, [location.state])
 
     return (
         <>
                 <Posters>
-                    {loading ? <Loading />:
-                movies.map((movie) => (
-                    <Poster key={movie.id} id={movie.id} coverImg={movie.poster_path} title={movie.original_title} 
-                    rating={movie.vote_average} overview={movie.overview} />
-                    ))
-                }
+                {(isLoading && !isFetching) ? (
+        <Loading />
+      ) : (
+        data && data.map((movie) => (
+          <Poster
+            key={movie.id}
+            id={movie.id}
+            coverImg={movie.poster_path}
+            title={movie.original_title}
+            rating={movie.vote_average}
+            overview={movie.overview}
+          />
+        ))
+      )}
             </Posters>
 
             <Pagination setPage={setPage} current={page} total={totalPage} />
